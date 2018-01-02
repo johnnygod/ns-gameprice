@@ -12,8 +12,6 @@ const client = new line.Client(config)
 const app = express()
 
 const handleEvent = (event) => {
-	console.log(event)
-
 	if (event.type !== 'message' || event.message.type !== 'text') {
 	    // ignore non-text-message event
 	    return Promise.resolve(null);
@@ -29,6 +27,10 @@ const handleEvent = (event) => {
 app.post('/callback', line.middleware(config), (req, res) => {
 	Promise.all(req.body.events.map(handleEvent))
 			.then(result => res.json(result))
+			.catch(err => {
+				console.log(err)
+				res.end()
+			})
 })
 
 const port = process.env.PORT || 3000

@@ -28,7 +28,14 @@ const handleEvent = (event) => {
 
 app.post('/callback', line.middleware(config), (req, res) => {
 	Promise.all(req.body.events.map(handleEvent))
-			.then(result => res.end())
+			.then(result => {
+				console.log(result)
+				res.end()
+			})
+			.catch(err => {
+				console.log(err)
+				res.status(500).end()
+			})
 })
 
 const port = process.env.PORT || 3000

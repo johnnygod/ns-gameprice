@@ -39,7 +39,11 @@ var handleEvent = function handleEvent(event) {
 
 app.post('/callback', line.middleware(config), function (req, res) {
 	_bluebird2.default.all(req.body.events.map(handleEvent)).then(function (result) {
-		return res.end();
+		console.log(result);
+		res.end();
+	}).catch(function (err) {
+		console.log(err);
+		res.status(500).end();
 	});
 });
 

@@ -16,7 +16,7 @@ const handleEvent = (event) => {
 
 	if (event.type !== 'message' || event.message.type !== 'text') {
 	    // ignore non-text-message event
-	    return Promise.resolve({});
+	    return Promise.resolve(null);
 	  }
 
 	  // create a echoing text message
@@ -29,6 +29,9 @@ const handleEvent = (event) => {
 app.post('/callback', line.middleware(config), (req, res) => {
 	Promise.all(req.body.events.map(handleEvent))
 			.then(result => res.json(result))
+			.catch(err => {
+				console.log(err)
+			})
 })
 
 const port = process.env.PORT || 3000

@@ -27,7 +27,7 @@ var handleEvent = function handleEvent(event) {
 
 	if (event.type !== 'message' || event.message.type !== 'text') {
 		// ignore non-text-message event
-		return _bluebird2.default.resolve({});
+		return _bluebird2.default.resolve(null);
 	}
 
 	// create a echoing text message
@@ -40,6 +40,8 @@ var handleEvent = function handleEvent(event) {
 app.post('/callback', line.middleware(config), function (req, res) {
 	_bluebird2.default.all(req.body.events.map(handleEvent)).then(function (result) {
 		return res.json(result);
+	}).catch(function (err) {
+		console.log(err);
 	});
 });
 

@@ -16,7 +16,7 @@ const handleEvent = (event) => {
 
 	if (event.type !== 'message' || event.message.type !== 'text') {
 	    // ignore non-text-message event
-	    return Promise.resolve(null);
+	    return Promise.resolve({});
 	  }
 
 	  // create a echoing text message

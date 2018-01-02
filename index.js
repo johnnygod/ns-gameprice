@@ -27,7 +27,7 @@ var handleEvent = function handleEvent(event) {
 
 	if (event.type !== 'message' || event.message.type !== 'text') {
 		// ignore non-text-message event
-		return _bluebird2.default.resolve(null);
+		return _bluebird2.default.resolve({});
 	}
 
 	// create a echoing text message

@@ -64,7 +64,7 @@ const handleEvent = event => {
 
 			if (gameData.length == 0) return client.replyMessage(event.replyToken, { type: 'text', text: '查無此遊戲資料!' });
 
-			const tmsgs = gameData.map(item => {
+			const tmsgs = gameData.slice(0, 3).map(item => {
 				const { title, price, images: { cover }, url } = item;
 
 				console.log(title);
@@ -109,10 +109,7 @@ const handleEvent = event => {
 				};
 			});
 
-			return _bluebird2.default.map(tmsgs, (msg2push, idx) => {
-				console.log(`about to push data to client (${gameData[idx].title})`);
-				return client.pushMessage(userId, msg2push);
-			});
+			return client.pushMessage(userId, tmsgs);
 		}).catch(err => {
 			console.log(err);
 			return _bluebird2.default.resolve(null);

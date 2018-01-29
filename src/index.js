@@ -52,7 +52,7 @@ const handleEvent = (event) => {
 					if(gameData.length == 0)
 						return client.replyMessage(event.replyToken, {type: 'text', text: '查無此遊戲資料!'});
 
-					const tmsgs = gameData.slice(0, 3).map(item => {
+					const msgs = gameData.slice(0, 3).map(item => {
 						const {title, price, images:{cover}, url} = item
 
 						console.log(title)
@@ -84,30 +84,33 @@ const handleEvent = (event) => {
 
 						const {price: price_best, priceTW, country, currency} = bestPrice
 
-						return {
-							type: 'template',
-							altText: 'search result',
-							template:{
-								type: 'buttons',
-								// thumbnailImageUrl: cover,
-								text: `遊戲名稱: ${title}\n最佳價格: ${currency} ${price_best} (台幣約${priceTW})`,
-								actions: [
-									{
-										type: 'uri',
-										label: '查看遊戲介紹',
-										uri: url
-									},
-									// {
-									// 	type: 'postback',
-									// 	label: '查看所有價格',
-									// 	data: allListMsg
-									// }
-								]
-							}
-						}						
+						// return {
+						// 	type: 'template',
+						// 	altText: 'search result',
+						// 	template:{
+						// 		type: 'buttons',
+						// 		// thumbnailImageUrl: cover,
+						// 		text: `遊戲名稱: ${title}\n最佳價格: ${currency} ${price_best} (台幣約${priceTW})`,
+						// 		actions: [
+						// 			{
+						// 				type: 'uri',
+						// 				label: '查看遊戲介紹',
+						// 				uri: url
+						// 			},
+						// 			// {
+						// 			// 	type: 'postback',
+						// 			// 	label: '查看所有價格',
+						// 			// 	data: allListMsg
+						// 			// }
+						// 		]
+						// 	}
+						// }
+						return `遊戲名稱: ${title}\n最佳價格: ${currency} ${price_best} (台幣約${priceTW})`
 					})
 
-					return client.pushMessage(userId, tmsgs)
+					return Promise.map(msgs, msg => {
+						return client.replyMessage(event.replyToken, {type: 'text', text: msg})
+					})
 				})
 				.catch(err => {
 					console.log(err)

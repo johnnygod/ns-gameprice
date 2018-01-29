@@ -23,10 +23,10 @@ const client = new line.Client(config);
 const app = (0, _express2.default)();
 
 const handleEvent = event => {
-	if (event.type !== 'message' || event.message.type !== 'text') {
-		// ignore non-text-message event
-		return _bluebird2.default.resolve(null);
-	}
+	// if (event.type !== 'message' || event.message.type !== 'text') {
+	//     // ignore non-text-message event
+	//     return Promise.resolve(null);
+	//  	}
 
 	// create a echoing text message
 	// const echo = { type: 'text', text: event.message.text };

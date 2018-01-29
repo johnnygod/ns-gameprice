@@ -5,17 +5,19 @@
   "repository": "https://github.com/johnnygod/ns-gameprice",
   "author": "pidashin",
   "scripts": {
-    "build": "babel index.dev.js -o index.js",
+    "build": "babel src -d dist",
     "start": "node ."
   },
   "license": "MIT",
   "dependencies": {
     "@line/bot-sdk": "^5.2.0",
     "bluebird": "^3.5.1",
-    "express": "^4.16.2"
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.2",
+    "superagent": "^3.8.2"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-latest": "^6.24.1"
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0"
   }
 }

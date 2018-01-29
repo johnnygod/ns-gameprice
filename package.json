@@ -1,7 +1,7 @@
 {
   "name": "ns-gameprice",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "https://github.com/johnnygod/ns-gameprice",
   "author": "pidashin",
   "scripts": {

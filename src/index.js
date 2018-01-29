@@ -3,6 +3,7 @@ import express from 'express'
 import Promise from 'bluebird'
 import checkPrice from './checkPrice'
 import getExchangeRate from './getExchangeRate'
+import ccMapping from './country-currency-mapping'
 
 const config = {
 	channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,

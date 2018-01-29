@@ -16,6 +16,10 @@ var _getExchangeRate = require('./getExchangeRate');
 
 var _getExchangeRate2 = _interopRequireDefault(_getExchangeRate);
 
+var _countryCurrencyMapping = require('./country-currency-mapping');
+
+var _countryCurrencyMapping2 = _interopRequireDefault(_countryCurrencyMapping);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const line = require('@line/bot-sdk');
@@ -63,7 +67,7 @@ const handleEvent = event => {
 
 				let allListMsg = '';
 				const bestPrice = Object.keys(price).reduce((acc, key) => {
-					const mapping = ccMapping[key];
+					const mapping = _countryCurrencyMapping2.default[key];
 
 					if (mapping == null) return `can't find currency for ${key}`;
 

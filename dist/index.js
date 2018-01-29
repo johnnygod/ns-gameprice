@@ -54,6 +54,8 @@ const handleEvent = event => {
 
 		console.log(txt, userId, /^\$/.test(txt));
 
+		return client.replyMessage(event.replyToken, { type: 'text', text: txt });
+
 		if (!/^\$/.test(txt)) return _bluebird2.default.resolve(null);
 
 		const game2search = txt.replace(/^\$/, '');

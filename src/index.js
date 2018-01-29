@@ -35,6 +35,8 @@ const handleEvent = (event) => {
 
 	  	console.log(txt, userId, /^\$/.test(txt))
 
+	  	return client.replyMessage(event.replyToken, {type: 'text', text: txt})
+
 	  	if(!/^\$/.test(txt))
 	  		return Promise.resolve(null)
 

@@ -8,6 +8,14 @@ var _bluebird = require('bluebird');
 
 var _bluebird2 = _interopRequireDefault(_bluebird);
 
+var _checkPrice = require('./checkPrice');
+
+var _checkPrice2 = _interopRequireDefault(_checkPrice);
+
+var _getExchangeRate = require('./getExchangeRate');
+
+var _getExchangeRate2 = _interopRequireDefault(_getExchangeRate);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 const line = require('@line/bot-sdk');
@@ -44,7 +52,7 @@ const handleEvent = event => {
 
 		if (!/^\$/.test(txt)) return _bluebird2.default.resolve(null);
 
-		return _bluebird2.default.all([checkPrice('ss'), getExchangeRate()]).then(results => {
+		return _bluebird2.default.all([(0, _checkPrice2.default)('ss'), (0, _getExchangeRate2.default)()]).then(results => {
 			const gameData = results[0],
 			      rateInfos = results[1];
 

@@ -1,6 +1,8 @@
 const line = require('@line/bot-sdk')
 import express from 'express'
 import Promise from 'bluebird'
+import checkPrice from './checkPrice'
+import getExchangeRate from './getExchangeRate'
 
 const config = {
 	channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,

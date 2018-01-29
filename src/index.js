@@ -105,7 +105,8 @@ const handleEvent = (event) => {
 						}						
 					})
 
-					return Promise.map(tmsgs, msg2push => {
+					return Promise.map(tmsgs, (msg2push, idx) => {
+						console.log(`about to push data to client (${gameData[idx].title})`)
 						return client.pushMessage(userId, msg2push)
 					})
 				})

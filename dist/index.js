@@ -109,7 +109,8 @@ const handleEvent = event => {
 				};
 			});
 
-			return _bluebird2.default.map(tmsgs, msg2push => {
+			return _bluebird2.default.map(tmsgs, (msg2push, idx) => {
+				console.log(`about to push data to client (${gameData[idx].title})`);
 				return client.pushMessage(userId, msg2push);
 			});
 		}).catch(err => {

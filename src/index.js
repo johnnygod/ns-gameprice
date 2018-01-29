@@ -43,8 +43,6 @@ const handleEvent = (event) => {
 	  	const showAll = /-al{1,2}(\s|$)/.test(txt)
 	  	const game2search = showAll ? txt.replace(/^\$/, '').replace(/-al{1,2}(\s|$)/, '') : txt.replace(/^\$/, '')
 
-	  	console.log(showAll, game2search, game2search.trim())
-
 	  	return Promise.all([
 					checkPrice(game2search.trim()),
 					getExchangeRate(),
@@ -75,8 +73,8 @@ const handleEvent = (event) => {
 
 							const country = mapping.name, currency = mapping.currency
 
-							const priceTW_txt = priceTW == null ? '' : `(台幣約${priceTW})`
-							allListMsg += `販售地區: ${country}\n價格: ${currency} ${price[key]} ${priceTW_txt}\n`
+							if(priceTW != null)
+								allListMsg += `販售地區: ${country}\n價格: ${currency} ${price[key]} (台幣約${priceTW})\n`							
 
 							if(priceTW != null && (acc == null || acc.priceTW > priceTW))
 								return {price: price[key], priceTW, country, currency}

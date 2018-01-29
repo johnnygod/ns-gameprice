@@ -43,7 +43,7 @@ const handleEvent = (event) => {
 	  	const showAll = /-al{1,2}(\s|$)/.test(txt)
 	  	const game2search = showAll ? txt.replace(/^\$/, '').replace(/-al{1,2}(\s|$)/, '') : txt.replace(/^\$/, '')
 
-	  	console.log(showAll, game2search)
+	  	console.log(showAll, game2search, '' + game2search)
 
 	  	return Promise.all([
 					checkPrice(game2search),

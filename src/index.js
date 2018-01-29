@@ -84,7 +84,7 @@ const handleEvent = (event) => {
 
 						return {
 							type: 'template',
-							altText: '查詢結果',
+							altText: 'search result',
 							template:{
 								type: 'buttons',
 								// thumbnailImageUrl: cover,

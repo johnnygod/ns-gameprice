@@ -40,9 +40,9 @@ const handleEvent = event => {
 		const txt = event.message.text;
 		const userId = event.source.userId;
 
-		console.log(txt, userId, /^$/.test(txt));
+		console.log(txt, userId, /^\$/.test(txt));
 
-		if (!/^$/.test(txt)) return _bluebird2.default.resolve(null);
+		if (!/^\$/.test(txt)) return _bluebird2.default.resolve(null);
 
 		return _bluebird2.default.all([checkPrice('ss'), getExchangeRate()]).then(results => {
 			const gameData = results[0],

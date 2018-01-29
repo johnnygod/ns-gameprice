@@ -30,9 +30,9 @@ const handleEvent = (event) => {
 		const txt = event.message.text
 	  	const userId = event.source.userId
 
-	  	console.log(txt, userId, /^$/.test(txt))
+	  	console.log(txt, userId, /^\$/.test(txt))
 
-	  	if(!/^$/.test(txt))
+	  	if(!/^\$/.test(txt))
 	  		return Promise.resolve(null)
 
 	  	return Promise.all([

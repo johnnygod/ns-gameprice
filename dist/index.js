@@ -61,9 +61,9 @@ const handleEvent = event => {
 		const showAll = /-al{1,2}(\s|$)/.test(txt);
 		const game2search = showAll ? txt.replace(/^\$/, '').replace(/-al{1,2}(\s|$)/, '') : txt.replace(/^\$/, '');
 
-		console.log(showAll, game2search, '' + game2search);
+		console.log(showAll, game2search, game2search.trim());
 
-		return _bluebird2.default.all([(0, _checkPrice2.default)(game2search), (0, _getExchangeRate2.default)()]).then(results => {
+		return _bluebird2.default.all([(0, _checkPrice2.default)(game2search.trim()), (0, _getExchangeRate2.default)()]).then(results => {
 			const gameData = results[0],
 			      rateInfos = results[1];
 

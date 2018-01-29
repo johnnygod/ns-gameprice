@@ -66,7 +66,7 @@ const handleEvent = event => {
 
 			if (gameData.length == 0) return client.replyMessage(event.replyToken, { type: 'text', text: '查無此遊戲資料!' });
 
-			const msgs = gameData.slice(0, 3).map(item => {
+			const msgs = gameData.slice(0, 5).map(item => {
 				const { title, price, images: { cover }, url } = item;
 
 				console.log(title);
@@ -116,12 +116,10 @@ const handleEvent = event => {
 				// 		]
 				// 	}
 				// }
-				return `遊戲名稱: ${title}\n最佳價格: ${currency} ${price_best} (台幣約${priceTW})`;
+				return { type: 'text', text: `遊戲名稱: ${title}\n最佳價格: ${currency} ${price_best} (台幣約${priceTW})` };
 			});
 
-			return _bluebird2.default.map(msgs, msg => {
-				return client.replyMessage(event.replyToken, { type: 'text', text: msg });
-			});
+			return client.replyMessage(event.replyToken, msgs);
 		}).catch(err => {
 			console.log(err);
 			return _bluebird2.default.resolve(null);

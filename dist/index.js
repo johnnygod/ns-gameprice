@@ -64,7 +64,7 @@ const handleEvent = event => {
 
 			if (gameData.length == 0) return client.replyMessage(event.replyToken, { type: 'text', text: '查無此遊戲資料!' });
 
-			gameData.forEach(item => {
+			const tmsgs = gameData.slice(0, 5).map(item => {
 				const { title, price, images: { cover }, url } = item;
 
 				console.log(title);
@@ -91,7 +91,7 @@ const handleEvent = event => {
 
 				const { price: price_best, priceTW, country, currency } = bestPrice;
 
-				client.pushMessage(userId, {
+				return {
 					type: 'template',
 					altText: '查詢結果',
 					template: {
@@ -108,10 +108,10 @@ const handleEvent = event => {
 							data: allListMsg
 						}]
 					}
-				});
+				};
 			});
 
-			return null;
+			return client.pushMessage(userId, tmsgs);
 		}).catch(err => {
 			console.log(err);
 			return _bluebird2.default.resolve(null);

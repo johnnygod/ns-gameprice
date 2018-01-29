@@ -39,7 +39,7 @@ const handleEvent = (event) => {
 	  		return Promise.resolve(null)
 
 	  	return Promise.all([
-					checkPrice('ss'),
+					checkPrice(txt.replace(/^\$/, '')),
 					getExchangeRate(),
 				])
 				.then(results => {
@@ -56,7 +56,7 @@ const handleEvent = (event) => {
 							const mapping = ccMapping[key]
 
 							if(mapping == null)
-								return `can't find currency for ${key}`
+								return acc
 
 							const rInfo = rateInfos.find(item => item.currency == mapping.currency )
 

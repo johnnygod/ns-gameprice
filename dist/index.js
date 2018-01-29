@@ -56,7 +56,7 @@ const handleEvent = event => {
 
 		if (!/^\$/.test(txt)) return _bluebird2.default.resolve(null);
 
-		return _bluebird2.default.all([(0, _checkPrice2.default)('ss'), (0, _getExchangeRate2.default)()]).then(results => {
+		return _bluebird2.default.all([(0, _checkPrice2.default)(txt.replace(/^\$/, '')), (0, _getExchangeRate2.default)()]).then(results => {
 			const gameData = results[0],
 			      rateInfos = results[1];
 
@@ -69,7 +69,7 @@ const handleEvent = event => {
 				const bestPrice = Object.keys(price).reduce((acc, key) => {
 					const mapping = _countryCurrencyMapping2.default[key];
 
-					if (mapping == null) return `can't find currency for ${key}`;
+					if (mapping == null) return acc;
 
 					const rInfo = rateInfos.find(item => item.currency == mapping.currency);
 

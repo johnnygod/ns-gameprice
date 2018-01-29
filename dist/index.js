@@ -84,7 +84,7 @@ const handleEvent = event => {
 					const country = mapping.name,
 					      currency = mapping.currency;
 
-					allListMsg += `販售地區: ${country}\n價格: ${currency} ${price} (台幣約${priceTW})\n`;
+					allListMsg += `販售地區: ${country}\n價格: ${currency} ${price[key]} (台幣約${priceTW})\n`;
 
 					if (priceTW != null && (acc == null || acc.priceTW > priceTW)) return { price: price[key], priceTW, country, currency };else return acc;
 				}, null);

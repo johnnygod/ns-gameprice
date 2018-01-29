@@ -57,6 +57,7 @@ const handleEvent = event => {
 		if (!/^\$/.test(txt)) return _bluebird2.default.resolve(null);
 
 		return _bluebird2.default.all([(0, _checkPrice2.default)('ss'), (0, _getExchangeRate2.default)()]).then(results => {
+			console.log(results);
 			const gameData = results[0],
 			      rateInfos = results[1];
 

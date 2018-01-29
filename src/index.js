@@ -43,6 +43,7 @@ const handleEvent = (event) => {
 					getExchangeRate(),
 				])
 				.then(results => {
+					console.log(results)
 					const gameData = results[0], rateInfos = results[1]
 
 					if(gameData.length == 0)

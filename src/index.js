@@ -43,6 +43,8 @@ const handleEvent = (event) => {
 	  	const showAll = /-al{1,2}(\s|$)/.test(txt)
 	  	const game2search = showAll ? txt.replace(/^\$/, '').replace(/-al{1,2}(\s|$)/, '') : txt.replace(/^\$/, '')
 
+	  	console.log(showAll, game2search)
+
 	  	return Promise.all([
 					checkPrice(game2search),
 					getExchangeRate(),
@@ -111,7 +113,7 @@ const handleEvent = (event) => {
 						let text = `遊戲名稱: ${title}\n最佳價格: ${currency} ${price_best} (台幣約${priceTW})`
 						if(showAll)
 							text += `\n\n全區價格:\n${allListMsg}`
-						
+
 						return {type: 'text', text}
 					})
 

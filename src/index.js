@@ -43,7 +43,6 @@ const handleEvent = (event) => {
 					getExchangeRate(),
 				])
 				.then(results => {
-					console.log(results)
 					const gameData = results[0], rateInfos = results[1]
 
 					if(gameData.length == 0)
@@ -99,7 +98,14 @@ const handleEvent = (event) => {
 							}
 						})
 					})
+
+					return null
 				})
+				.catch(err => {
+					console.log(err)
+					return Promise.resolve(null)
+				})
+
 	}
 	//handle show all price
 	else if(event.type === 'postback'){

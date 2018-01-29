@@ -38,8 +38,10 @@ const handleEvent = (event) => {
 	  	if(!/^\$/.test(txt))
 	  		return Promise.resolve(null)
 
+	  	const game2search = txt.replace(/^\$/, '')
+
 	  	return Promise.all([
-					checkPrice(txt.replace(/^\$/, '')),
+					checkPrice(game2search),
 					getExchangeRate(),
 				])
 				.then(results => {
@@ -50,6 +52,8 @@ const handleEvent = (event) => {
 
 					gameData.forEach(item => {
 						const {title, price, images:{cover}, url} = item
+
+						console.log(title)
 
 						let allListMsg = ''
 						const bestPrice = Object.keys(price).reduce((acc, key) => {
@@ -62,7 +66,7 @@ const handleEvent = (event) => {
 
 							const priceTW = rInfo == null || rInfo.cashSell == null ? null : (price[key] * rInfo.cashSell).toFixed(0)
 
-							const exchangeMsg = priceTW == null ? '' : `-> NTD: ${price[key] * rInfo.cashSell}`
+							// const exchangeMsg = priceTW == null ? '' : `-> NTD: ${price[key] * rInfo.cashSell}`
 
 							const country = mapping.name, currency = mapping.currency
 

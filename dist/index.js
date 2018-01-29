@@ -56,7 +56,9 @@ const handleEvent = event => {
 
 		if (!/^\$/.test(txt)) return _bluebird2.default.resolve(null);
 
-		return _bluebird2.default.all([(0, _checkPrice2.default)(txt.replace(/^\$/, '')), (0, _getExchangeRate2.default)()]).then(results => {
+		const game2search = txt.replace(/^\$/, '');
+
+		return _bluebird2.default.all([(0, _checkPrice2.default)(game2search), (0, _getExchangeRate2.default)()]).then(results => {
 			const gameData = results[0],
 			      rateInfos = results[1];
 
@@ -64,6 +66,8 @@ const handleEvent = event => {
 
 			gameData.forEach(item => {
 				const { title, price, images: { cover }, url } = item;
+
+				console.log(title);
 
 				let allListMsg = '';
 				const bestPrice = Object.keys(price).reduce((acc, key) => {
@@ -75,7 +79,7 @@ const handleEvent = event => {
 
 					const priceTW = rInfo == null || rInfo.cashSell == null ? null : (price[key] * rInfo.cashSell).toFixed(0);
 
-					const exchangeMsg = priceTW == null ? '' : `-> NTD: ${price[key] * rInfo.cashSell}`;
+					// const exchangeMsg = priceTW == null ? '' : `-> NTD: ${price[key] * rInfo.cashSell}`
 
 					const country = mapping.name,
 					      currency = mapping.currency;

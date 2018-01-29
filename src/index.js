@@ -40,7 +40,8 @@ const handleEvent = (event) => {
 	  	if(!/^\$/.test(txt))
 	  		return Promise.resolve(null)
 
-	  	const game2search = txt.replace(/^\$/, '')
+	  	const showAll = /-al{1,2}(\s|$)/.test(txt)
+	  	const game2search = showAll ? txt.replace(/^\$/, '').replace(/-al{1,2}(\s|$)/, '') : txt.replace(/^\$/, '')
 
 	  	return Promise.all([
 					checkPrice(game2search),
@@ -72,7 +73,8 @@ const handleEvent = (event) => {
 
 							const country = mapping.name, currency = mapping.currency
 
-							allListMsg += `販售地區: ${country}\n價格: ${currency} ${price[key]} (台幣約${priceTW})\n`
+							const priceTW_txt = priceTW == null ? '' : `(台幣約${priceTW})`
+							allListMsg += `販售地區: ${country}\n價格: ${currency} ${price[key]} ${priceTW_txt}\n`
 
 							if(priceTW != null && (acc == null || acc.priceTW > priceTW))
 								return {price: price[key], priceTW, country, currency}
@@ -105,7 +107,12 @@ const handleEvent = (event) => {
 						// 		]
 						// 	}
 						// }
-						return {type: 'text', text: `遊戲名稱: ${title}\n最佳價格: ${currency} ${price_best} (台幣約${priceTW})`}
+
+						let text = `遊戲名稱: ${title}\n最佳價格: ${currency} ${price_best} (台幣約${priceTW})`
+						if(showAll)
+							text += `\n\n全區價格:\n${allListMsg}`
+						
+						return {type: 'text', text}
 					})
 
 					return client.replyMessage(event.replyToken, msgs)

@@ -1,0 +1,45 @@
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	AT: { name: 'Austria', currency: 'EUR' },
+	AU: { name: 'Australia', currency: 'AUD' },
+	BE: { name: 'Belgium', currency: 'EUR' },
+	BG: { name: 'Bulgaria', currency: 'BGN' },
+	CA: { name: 'Canada', currency: 'CAD' },
+	CH: { name: 'Switzerland', currency: 'CHF' },
+	CY: { name: 'Cyprus', currency: 'EUR' },
+	CZ: { name: 'Czech Republic', currency: 'CZK' },
+	DE: { name: 'Germany', currency: 'EUR' },
+	DK: { name: 'Denmark', currency: 'DKK' },
+	EE: { name: 'Estonia', currency: 'EUR' },
+	ES: { name: 'Spain', currency: 'EUR' },
+	FI: { name: 'Finland', currency: 'EUR' },
+	FR: { name: 'France', currency: 'EUR' },
+	GB: { name: 'United Kingdom', currency: 'GBP' },
+	GR: { name: 'Greece', currency: 'EUR' },
+	HR: { name: 'Croatia', currency: 'HRK' },
+	HU: { name: 'Hungary', currency: 'HUF' },
+	IE: { name: 'Ireland', currency: 'EUR' },
+	IT: { name: 'Italy', currency: 'EUR' },
+	JP: { name: 'Japan', currency: 'JPY' },
+	LT: { name: 'Lithuania', currency: 'EUR' },
+	LU: { name: 'Luxembourg', currency: 'EUR' },
+	LV: { name: 'Latvia', currency: 'EUR' },
+	MT: { name: 'Malta', currency: 'EUR' },
+	MX: { name: 'Mexico', currency: 'MXN' },
+	NL: { name: 'Netherlands', currency: 'EUR' },
+	NO: { name: 'Norway', currency: 'NOK' },
+	NZ: { name: 'New Zealand', currency: 'NZD' },
+	PL: { name: 'Poland', currency: 'PLN' },
+	PT: { name: 'Portugal', currency: 'EUR' },
+	RO: { name: 'Romania', currency: 'RON' },
+	RU: { name: 'Russian Federation', currency: 'RUB' },
+	SE: { name: 'Sweden', currency: 'SEK' },
+	SI: { name: 'Slovenia', currency: 'EUR' },
+	SK: { name: 'Slovakia', currency: 'EUR' },
+	US: { name: 'United States', currency: 'USD' },
+	ZA: { name: 'South Africa', currency: 'ZAR' }
+};

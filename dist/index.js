@@ -89,6 +89,8 @@ const handleEvent = event => {
 					if (priceTW != null && (acc == null || acc.priceTW > priceTW)) return { price: price[key], priceTW, country, currency };else return acc;
 				}, null);
 
+				console.log(bestPrice);
+
 				const { price: price_best, priceTW, country, currency } = bestPrice;
 
 				return {
@@ -102,10 +104,6 @@ const handleEvent = event => {
 							type: 'uri',
 							label: '查看遊戲介紹',
 							uri: url
-						}, {
-							type: 'postback',
-							label: '查看所有價格',
-							data: allListMsg
 						}]
 					}
 				};

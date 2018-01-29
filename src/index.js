@@ -78,6 +78,8 @@ const handleEvent = (event) => {
 								return acc
 						}, null)
 
+						console.log(bestPrice)
+
 						const {price: price_best, priceTW, country, currency} = bestPrice
 
 						return {
@@ -93,11 +95,11 @@ const handleEvent = (event) => {
 										label: '查看遊戲介紹',
 										uri: url
 									},
-									{
-										type: 'postback',
-										label: '查看所有價格',
-										data: allListMsg
-									}
+									// {
+									// 	type: 'postback',
+									// 	label: '查看所有價格',
+									// 	data: allListMsg
+									// }
 								]
 							}
 						}						

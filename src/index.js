@@ -88,7 +88,7 @@ const handleEvent = (event) => {
 							if(showAll)
 								text += `\n\n全區價格:\n${allListMsg}`							
 							
-							return { type: 'text', text: event.message.text }
+							return { type: 'text', text }
 						})
 
 						return client.replyMessage(event.replyToken, msgs)

@@ -78,7 +78,7 @@ const handleEvent = event => {
 					return (0, _getExchangeRate2.default)(mapping.currency, price);
 				}));
 			}).then(priceTWArrByGame => {
-				top5Games.forEach((item, idx) => {
+				const msgs = top5Games.map((item, idx) => {
 					const { title, price } = item,
 					      priceTWArr = priceTWArrByGame[idx];
 
@@ -105,10 +105,10 @@ const handleEvent = event => {
 					let text = `遊戲名稱: ${title}\n最佳價格: ${currency} ${price_best} (台幣約${priceTW})`;
 					if (showAll) text += `\n\n全區價格:\n${allListMsg}`;
 
-					client.replyMessage(event.replyToken, msgs);
+					return { type: 'text', text: event.message.text };
 				});
 
-				return;
+				return client.replyMessage(event.replyToken, msgs);
 			});
 		}).catch(err => {
 			console.log(err);

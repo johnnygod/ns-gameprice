@@ -2,7 +2,7 @@ const line = require('@line/bot-sdk')
 import express from 'express'
 import Promise from 'bluebird'
 import checkPrice from './checkPrice'
-import getExchangeRate from './getExchangeRate'
+import getExchangeRate from './getExchangeRate2'
 import ccMapping from './country-currency-mapping'
 
 const config = {
@@ -41,87 +41,63 @@ const handleEvent = (event) => {
 	  		return Promise.resolve(null)
 
 	  	const showAll = /-al{1,2}(\s|$)/.test(txt)
-	  	const game2search = showAll ? txt.replace(/^\$/, '').replace(/-al{1,2}(\s|$)/, '') : txt.replace(/^\$/, '')
-
-	  	return Promise.all([
-					checkPrice(game2search.trim()),
-					getExchangeRate(),
-				])
-				.then(results => {
-					const gameData = results[0], rateInfos = results[1]
-
-					if(gameData.length == 0)
+		const game2search = showAll ? txt.replace(/^\$/, '').replace(/-al{1,2}(\s|$)/, '') : txt.replace(/^\$/, '')
+		  
+		return checkPrice(game2search.trim())
+				.then(gameDatas => {
+					if(gameDatas.length == 0)
 						return client.replyMessage(event.replyToken, {type: 'text', text: '查無此遊戲資料!'});
 
-					const msgs = gameData.slice(0, 5).map(item => {
-						const {title, price, images:{cover}, url} = item
-
-						console.log(title)
-
-						let allListMsg = ''
-						const bestPrice = Object.keys(price).reduce((acc, key) => {
-							const mapping = ccMapping[key]
-
-							if(mapping == null)
-								return acc
-
-							const rInfo = rateInfos.find(item => item.currency == mapping.currency )
-
-							const priceTW = rInfo == null || rInfo.cashSell == null ? null : (price[key] * rInfo.cashSell).toFixed(0)
-
-							// const exchangeMsg = priceTW == null ? '' : `-> NTD: ${price[key] * rInfo.cashSell}`
-
-							const country = mapping.name, currency = mapping.currency
-
-							if(priceTW != null)
-								allListMsg += `販售地區: ${country}\n價格: ${currency} ${price[key]} (台幣約${priceTW})\n`							
-
-							if(priceTW != null && (acc == null || acc.priceTW > priceTW))
-								return {price: price[key], priceTW, country, currency}
-							else
-								return acc
-						}, null)
-
-						console.log(bestPrice)
-
-						const {price: price_best, priceTW, country, currency} = bestPrice
-
-						// return {
-						// 	type: 'template',
-						// 	altText: 'search result',
-						// 	template:{
-						// 		type: 'buttons',
-						// 		// thumbnailImageUrl: cover,
-						// 		text: `遊戲名稱: ${title}\n最佳價格: ${currency} ${price_best} (台幣約${priceTW})`,
-						// 		actions: [
-						// 			{
-						// 				type: 'uri',
-						// 				label: '查看遊戲介紹',
-						// 				uri: url
-						// 			},
-						// 			// {
-						// 			// 	type: 'postback',
-						// 			// 	label: '查看所有價格',
-						// 			// 	data: allListMsg
-						// 			// }
-						// 		]
-						// 	}
-						// }
-
-						let text = `遊戲名稱: ${title}\n最佳價格: ${currency} ${price_best} (台幣約${priceTW})`
-						if(showAll)
-							text += `\n\n全區價格:\n${allListMsg}`
-
-						return {type: 'text', text}
+					const top5Games = gameDatas.slice(0, 5)
+					return Promise.map(top5Games, gameData => {
+						return Promise.all(Object.keys(gameData.price).map(key => {
+							const price = gameData.price[key], mapping = ccMapping[key]
+				
+							if(mapping == null){
+								console.log(`can't find currency for ${key}`)
+								return Promise.resolve(null)
+							}
+				
+							return getExchangeRate(mapping.currency, price)
+						}))		
 					})
+					.then(priceTWArrByGame => {
+						top5Games.forEach((item, idx) => {
+							const {title, price} = item, priceTWArr = priceTWArrByGame[idx]
+				
+							const keys_price = Object.keys(price)
 
-					return client.replyMessage(event.replyToken, msgs)
+							let allListMsg = ''
+							const bestPrice = priceTWArr.reduce((acc, cur, pidx) => {
+								const key_price = keys_price[pidx], mapping = ccMapping[key_price]
+								const country = mapping.name, currency = mapping.currency
+
+								if(cur != null)
+									allListMsg += `販售地區: ${country}\n價格: ${currency} ${price[key_price]} (台幣約${cur})\n`													
+
+								if(cur == null || (acc != null && acc.priceTW < cur)){
+									return acc
+								}
+				
+								return {price: price[key_price], priceTW: cur, country, currency}
+							}, null)
+
+							const {price: price_best, priceTW, country, currency} = bestPrice
+				
+							let text = `遊戲名稱: ${title}\n最佳價格: ${currency} ${price_best} (台幣約${priceTW})`
+							if(showAll)
+								text += `\n\n全區價格:\n${allListMsg}`
+							
+							client.replyMessage(event.replyToken, msgs)
+						})
+
+						return
+					})
 				})
 				.catch(err => {
 					console.log(err)
 					return Promise.resolve(null)
 				})
-
 	}
 	//handle show all price
 	else if(event.type === 'postback'){

@@ -12,7 +12,7 @@ var _checkPrice = require('./checkPrice');
 
 var _checkPrice2 = _interopRequireDefault(_checkPrice);
 
-var _getExchangeRate = require('./getExchangeRate');
+var _getExchangeRate = require('./getExchangeRate2');
 
 var _getExchangeRate2 = _interopRequireDefault(_getExchangeRate);
 
@@ -61,70 +61,55 @@ const handleEvent = event => {
 		const showAll = /-al{1,2}(\s|$)/.test(txt);
 		const game2search = showAll ? txt.replace(/^\$/, '').replace(/-al{1,2}(\s|$)/, '') : txt.replace(/^\$/, '');
 
-		return _bluebird2.default.all([(0, _checkPrice2.default)(game2search.trim()), (0, _getExchangeRate2.default)()]).then(results => {
-			const gameData = results[0],
-			      rateInfos = results[1];
+		return (0, _checkPrice2.default)(game2search.trim()).then(gameDatas => {
+			if (gameDatas.length == 0) return client.replyMessage(event.replyToken, { type: 'text', text: '查無此遊戲資料!' });
 
-			if (gameData.length == 0) return client.replyMessage(event.replyToken, { type: 'text', text: '查無此遊戲資料!' });
+			const top5Games = gameDatas.slice(0, 5);
+			return _bluebird2.default.map(top5Games, gameData => {
+				return _bluebird2.default.all(Object.keys(gameData.price).map(key => {
+					const price = gameData.price[key],
+					      mapping = _countryCurrencyMapping2.default[key];
 
-			const msgs = gameData.slice(0, 5).map(item => {
-				const { title, price, images: { cover }, url } = item;
+					if (mapping == null) {
+						console.log(`can't find currency for ${key}`);
+						return _bluebird2.default.resolve(null);
+					}
 
-				console.log(title);
+					return (0, _getExchangeRate2.default)(mapping.currency, price);
+				}));
+			}).then(priceTWArrByGame => {
+				top5Games.forEach((item, idx) => {
+					const { title, price } = item,
+					      priceTWArr = priceTWArrByGame[idx];
 
-				let allListMsg = '';
-				const bestPrice = Object.keys(price).reduce((acc, key) => {
-					const mapping = _countryCurrencyMapping2.default[key];
+					const keys_price = Object.keys(price);
 
-					if (mapping == null) return acc;
+					let allListMsg = '';
+					const bestPrice = priceTWArr.reduce((acc, cur, pidx) => {
+						const key_price = keys_price[pidx],
+						      mapping = _countryCurrencyMapping2.default[key_price];
+						const country = mapping.name,
+						      currency = mapping.currency;
 
-					const rInfo = rateInfos.find(item => item.currency == mapping.currency);
+						if (cur != null) allListMsg += `販售地區: ${country}\n價格: ${currency} ${price[key_price]} (台幣約${cur})\n`;
 
-					const priceTW = rInfo == null || rInfo.cashSell == null ? null : (price[key] * rInfo.cashSell).toFixed(0);
+						if (cur == null || acc != null && acc.priceTW < cur) {
+							return acc;
+						}
 
-					// const exchangeMsg = priceTW == null ? '' : `-> NTD: ${price[key] * rInfo.cashSell}`
+						return { price: price[key_price], priceTW: cur, country, currency };
+					}, null);
 
-					const country = mapping.name,
-					      currency = mapping.currency;
+					const { price: price_best, priceTW, country, currency } = bestPrice;
 
-					if (priceTW != null) allListMsg += `販售地區: ${country}\n價格: ${currency} ${price[key]} (台幣約${priceTW})\n`;
+					let text = `遊戲名稱: ${title}\n最佳價格: ${currency} ${price_best} (台幣約${priceTW})`;
+					if (showAll) text += `\n\n全區價格:\n${allListMsg}`;
 
-					if (priceTW != null && (acc == null || acc.priceTW > priceTW)) return { price: price[key], priceTW, country, currency };else return acc;
-				}, null);
+					client.replyMessage(event.replyToken, msgs);
+				});
 
-				console.log(bestPrice);
-
-				const { price: price_best, priceTW, country, currency } = bestPrice;
-
-				// return {
-				// 	type: 'template',
-				// 	altText: 'search result',
-				// 	template:{
-				// 		type: 'buttons',
-				// 		// thumbnailImageUrl: cover,
-				// 		text: `遊戲名稱: ${title}\n最佳價格: ${currency} ${price_best} (台幣約${priceTW})`,
-				// 		actions: [
-				// 			{
-				// 				type: 'uri',
-				// 				label: '查看遊戲介紹',
-				// 				uri: url
-				// 			},
-				// 			// {
-				// 			// 	type: 'postback',
-				// 			// 	label: '查看所有價格',
-				// 			// 	data: allListMsg
-				// 			// }
-				// 		]
-				// 	}
-				// }
-
-				let text = `遊戲名稱: ${title}\n最佳價格: ${currency} ${price_best} (台幣約${priceTW})`;
-				if (showAll) text += `\n\n全區價格:\n${allListMsg}`;
-
-				return { type: 'text', text };
+				return;
 			});
-
-			return client.replyMessage(event.replyToken, msgs);
 		}).catch(err => {
 			console.log(err);
 			return _bluebird2.default.resolve(null);

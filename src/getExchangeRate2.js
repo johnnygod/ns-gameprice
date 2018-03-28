@@ -2,7 +2,7 @@ import superagent from 'superagent'
 import cheerio from 'cheerio'
 import Promise from 'bluebird'
 
-const baseUrl = `https://finance.google.com.hk/finance/converter?a=[price]&from=[currency]&to=TWD`
+const baseUrl = `https://finance.google.com.cn/finance/converter?a=[price]&from=[currency]&to=TWD`
 
 const getExchangeRateData = (currency, price) => {
     const url = baseUrl.replace(/\[currency\]/, currency).replace(/\[price\]/, price)
